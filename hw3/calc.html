@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간단한 계산기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .calculator {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 70px;
+            height: 50px;
+            font-size: 18px;
+            margin: 5px;
+        }
+
+        .switch {
+            display: inline-block;
+            position: relative;
+            width: 60px;
+            height: 34px;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <label class="switch">
+            <input type="checkbox" id="calculatorSwitch" checked>
+            <span class="slider round"></span>
+        </label>
+        <input type="text" id="result" readonly>
+        <button onclick="appendToResult('7')">7</button>
+        <button onclick="appendToResult('8')">8</button>
+        <button onclick="appendToResult('9')">9</button>
+        <button onclick="appendToResult('+')">+</button>
+        <button onclick="appendToResult('4')">4</button>
+        <button onclick="appendToResult('5')">5</button>
+        <button onclick="appendToResult('6')">6</button>
+        <button onclick="appendToResult('-')">-</button>
+        <button onclick="appendToResult('1')">1</button>
+        <button onclick="appendToResult('2')">2</button>
+        <button onclick="appendToResult('3')">3</button>
+        <button onclick="appendToResult('*')">*</button>
+        <button onclick="appendToResult('0')">0</button>
+        <button onclick="clearResult()">C</button>
+        <button onclick="calculateResult()">=</button>
+        <button onclick="appendToResult('/')">/</button>
+    </div>
+
+    <script>
+        let currentResult = '';
+        const calculatorSwitch = document.getElementById('calculatorSwitch');
+        const resultInput = document.getElementById('result');
+        const buttons = document.querySelectorAll('.calculator button');
+
+        function appendToResult(value) {
+            currentResult += value;
+            resultInput.value = currentResult;
+        }
+
+        function clearResult() {
+            currentResult = '';
+            resultInput.value = currentResult;
+        }
+
+        function calculateResult() {
+            try {
+                currentResult = eval(currentResult);
+                resultInput.value = currentResult;
+            } catch (error) {
+                resultInput.value = '오류';
+            }
+        }
+
+        calculatorSwitch.addEventListener('change', function () {
+            if (calculatorSwitch.checked) {
+                // Calculator is turned on
+                for (const button of buttons) {
+                    button.disabled = false;
+                }
+                resultInput.disabled = false;
+            } else {
+                // Calculator is turned off
+                clearResult();
+                for (const button of buttons) {
+                    button.disabled = true;
+                }
+                resultInput.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
